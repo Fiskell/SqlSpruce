@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea1fee525914154e6d6bbf071697b5a1",
-    "content-hash": "8b1485987e7c5949da82435d403e52e8",
+    "hash": "4ab4acae6c30fe0f387503052ee630bc",
+    "content-hash": "b9fc9d20158d2ef2351ce862145fda6e",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -894,6 +894,53 @@
                 "shell"
             ],
             "time": "2015-11-12 16:18:56"
+        },
+        {
+            "name": "selvinortiz/flux",
+            "version": "v0.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/selvinortiz/flux.git",
+                "reference": "2d7b78a04109e4e344f13b96ef6cf15fc44d640b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/selvinortiz/flux/zipball/2d7b78a04109e4e344f13b96ef6cf15fc44d640b",
+                "reference": "2d7b78a04109e4e344f13b96ef6cf15fc44d640b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SelvinOrtiz\\Utils\\Flux": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Selvin Ortiz",
+                    "email": "selvin@selvin.co",
+                    "homepage": "http://twitter.com/selvinortiz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Fluent regular expressions in PHP.",
+            "homepage": "https://github.com/selvinortiz/flux",
+            "keywords": [
+                "expressions",
+                "fluent",
+                "flux",
+                "php",
+                "regex",
+                "regular"
+            ],
+            "time": "2015-02-17 09:39:49"
         },
         {
             "name": "swiftmailer/swiftmailer",
