@@ -1,10 +1,12 @@
 {
   "private": true,
   "devDependencies": {
-    "gulp": "^3.8.8"
+    "gulp": "^3.8.8",
+    "gulp-notify": "^2.2.0",
+    "gulp-phpunit": "^0.8.4"
   },
   "dependencies": {
-    "laravel-elixir": "^4.0.0",
+    "laravel-elixir": "^2.0.0",
     "bootstrap-sass": "^3.0.0"
   }
 }
