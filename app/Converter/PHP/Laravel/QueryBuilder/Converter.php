@@ -16,15 +16,17 @@ class Converter
     }
 
     public static function deconstructCall($call) {
-        $flux    = Flux::getInstance()
-                       ->startOfLine()
-                       ->word()
-                       ->find('(')
-                       ->anything()
-                       ->then(')')
-                       ->endOfLine();
+        $flux = Flux::getInstance()
+                    ->startOfLine()
+                    ->word()
+                    ->find('(')
+                    ->anything()
+                    ->then(')')
+                    ->endOfLine();
+
         $pattern = $flux->getPattern();
         preg_match($pattern, $call, $matches);
+
         return [$matches[1], $matches[3]];
     }
 }
