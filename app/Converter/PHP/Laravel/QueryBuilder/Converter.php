@@ -5,9 +5,16 @@ use SelvinOrtiz\Utils\Flux\Flux;
 
 class Converter
 {
+    /**
+     * Convert string to SQL query if the
+     * string is a Laravel query builder
+     *
+     * @param $builder
+     * @return string
+     */
     public static function convert($builder) {
         $static_parts = explode('::', $builder);
-        $class        = $static_parts[0];
+//        $class        = $static_parts[0];
         $query        = $static_parts[1];
 
         $query_parts = explode('->', $query);
@@ -18,18 +25,37 @@ class Converter
             print_r($call_parts);
             switch($call_parts[0]) {
                 case 'table':
-                    $query->table = self::unquote($call_parts[1]);
+                    $query->setTable(self::unquote($call_parts[1]));
+                    break;
+                case 'get':
+                    $query->setIsSelect(true);
             }
         }
-        return $query->getSelectQuery();
+
+        if($query->getIsSelect()) {
+            return $query->getSelectQuery();
+        }
+        return "no query";
     }
 
+    /**
+     * Remove starting and ending quotes (single and double)
+     *
+     * @param $string
+     * @return string
+     */
     public static function unquote($string) {
         $string = trim($string);
         $string = trim($string, '\'');
         return trim($string, '"');
     }
 
+    /**
+     * Return the function call and it's parameters
+     *
+     * @param $call
+     * @return array
+     */
     public static function deconstructCall($call) {
         $flux = Flux::getInstance()
                     ->startOfLine()
@@ -37,9 +63,11 @@ class Converter
                     ->find('(')
                     ->anything()
                     ->then(')')
+                    ->maybe(';')
                     ->endOfLine();
 
         $pattern = $flux->getPattern();
+        print_r($pattern);
         preg_match($pattern, $call, $matches);
         print_r($matches);
 
