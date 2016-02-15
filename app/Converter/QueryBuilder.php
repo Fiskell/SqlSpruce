@@ -98,7 +98,7 @@ class QueryBuilder
     /**
      * @param mixed $select
      */
-    public function setSelect($select) {
+    public function setSelect(array $select) {
         $this->select = $select;
     }
 

@@ -27,6 +27,13 @@ class Converter
                 case 'table':
                     $query->setTable(self::unquote($call_parts[1]));
                     break;
+                case 'select':
+                    $select_parts = [];
+                    foreach(explode(',', $call_parts[1]) as $select_part){
+                        $select_parts[] = self::unquote($select_part);
+                    }
+                    $query->setSelect($select_parts);
+                    break;
                 case 'get':
                     $query->setIsSelect(true);
             }
