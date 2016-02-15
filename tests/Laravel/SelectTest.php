@@ -21,4 +21,12 @@ class SelectTest extends TestCase
         $this->assertEquals($converted, $query);
     }
 
+    public function test_distinct() {
+        $builder = "DB::table('users')->distinct()->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "SELECT DISTINCT * FROM `users`;";
+        $this->assertEquals($converted, $query);
+    }
+
 }

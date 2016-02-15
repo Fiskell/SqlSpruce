@@ -34,6 +34,9 @@ class Converter
                     }
                     $query->setSelect($select_parts);
                     break;
+                case 'distinct':
+                    $query->setDistinct(true);
+                    break;
                 case 'get':
                     $query->setIsSelect(true);
             }

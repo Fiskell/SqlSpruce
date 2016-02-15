@@ -6,7 +6,9 @@ class QueryBuilder
     private $is_update;
     private $is_insert;
     private $is_delete;
+
     private $select;
+    private $distinct;
     private $table;
     private $and_array;
     private $order_by;
@@ -20,9 +22,14 @@ class QueryBuilder
             $this->select = ["*"];
         }
 
+        if(!is_null($this->distinct)) {
+            $query .= "DISTINCT ";
+        }
+
         $query .= implode(', ', $this->select) . " ";
 
         $query .= "FROM `{$this->table}`";
+
 
 //        if(count($this->and_array) > 0) {
 //            $where = array_shift($this->and_array);
@@ -170,5 +177,19 @@ class QueryBuilder
      */
     public function setOffset($offset) {
         $this->offset = $offset;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistinct() {
+        return $this->distinct;
+    }
+
+    /**
+     * @param mixed $distinct
+     */
+    public function setDistinct($distinct) {
+        $this->distinct = $distinct;
     }
 }
