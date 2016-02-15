@@ -13,11 +13,19 @@ class SelectTest extends TestCase
         $this->assertEquals($converted, $query);
     }
 
-    public function test_simple_select() {
+    public function test_simple_select_with_multi_column_and_alias() {
         $builder = "DB::table('users')->select('name', 'email as user_email')->get();";
         $converted = Converter::convert($builder);
 
         $query = "SELECT name, email as user_email FROM `users`;";
+        $this->assertEquals($converted, $query);
+    }
+
+    public function test_simple_select() {
+        $builder = "DB::table('users')->select('name')->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "SELECT name FROM `users`;";
         $this->assertEquals($converted, $query);
     }
 
