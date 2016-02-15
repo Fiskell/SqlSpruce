@@ -2,17 +2,16 @@
 
 class QueryBuilder
 {
-    public $is_select;
-    public $is_update;
-    public $is_insert;
-    public $is_delete;
-
-    public $select;
-    public $table;
-    public $and_array;
-    public $order_by;
-    public $limit;
-    public $offset;
+    private $is_select;
+    private $is_update;
+    private $is_insert;
+    private $is_delete;
+    private $select;
+    private $table;
+    private $and_array;
+    private $order_by;
+    private $limit;
+    private $offset;
 
     public function getSelectQuery() {
         $query = "SELECT ";
