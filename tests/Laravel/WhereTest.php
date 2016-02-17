@@ -30,4 +30,15 @@ class WhereTest extends TestCase
         $query = "SELECT * FROM `users` WHERE votes >= 100;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_not_equal() {
+
+        $builder = "DB::table('users')
+                ->where('votes', '<>', 100)
+                ->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "SELECT * FROM `users` WHERE votes <> 100;";
+        $this->assertEquals($converted, $query);
+    }
 }
