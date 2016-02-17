@@ -38,5 +38,4 @@ class SelectTest extends TestCase
         $query = "SELECT DISTINCT * FROM `users`;";
         $this->assertEquals($converted, $query);
     }
-
 }

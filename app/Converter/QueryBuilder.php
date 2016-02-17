@@ -28,15 +28,15 @@ class QueryBuilder
 
         $query .= implode(', ', $this->select) . " ";
 
-        $query .= "FROM `{$this->table}`";
+        $query .= "FROM `{$this->table}` ";
 
 
-//        if(count($this->and_array) > 0) {
-//            $where = array_shift($this->and_array);
-//            $query .= 'WHERE ';
-//        }
+        if(count($this->and_array) > 0) {
+            $where = array_shift($this->and_array);
+            $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'];
+        }
 
-        return $query . ';';
+        return trim($query) . ';';
     }
 
     /**
@@ -131,10 +131,12 @@ class QueryBuilder
     }
 
     /**
-     * @param mixed $and_array
+     * @param $key
+     * @param $value
+     * @param string $operand
      */
-    public function setAndArray($and_array) {
-        $this->and_array = $and_array;
+    public function addAndCondition($key, $value, $operand="=") {
+        $this->and_array[] = ['key' => $key, 'value' => $value, 'operand' => $operand];
     }
 
     /**
