@@ -5,7 +5,7 @@ use TestCase;
 
 class WhereTest extends TestCase
 {
-    public function test_get_all() {
+    public function test_where_three_params() {
         $builder = "DB::table('users')->where('votes', '=', 100)->get();";
         $converted = Converter::convert($builder);
 
