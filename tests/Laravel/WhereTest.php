@@ -41,4 +41,14 @@ class WhereTest extends TestCase
         $query = "SELECT * FROM `users` WHERE votes <> 100;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_like() {
+        $builder = "DB::table('users')
+                ->where('name', 'like', 'T%')
+                ->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "SELECT * FROM `users` WHERE name like \"T%\";";
+        $this->assertEquals($converted, $query);
+    }
 }

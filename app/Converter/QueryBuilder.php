@@ -33,6 +33,9 @@ class QueryBuilder
 
         if(count($this->and_array) > 0) {
             $where = array_shift($this->and_array);
+            if(strTolower($where['operand']) === 'like') {
+                $where['value'] = "\"{$where['value']}\"";
+            }
             $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'];
         }
 
