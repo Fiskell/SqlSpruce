@@ -33,10 +33,18 @@ class QueryBuilder
 
         if(count($this->and_array) > 0) {
             $where = array_shift($this->and_array);
-            if(strTolower($where['operand']) === 'like') {
+
+            if(!is_numeric($where['value'])) {
                 $where['value'] = "\"{$where['value']}\"";
             }
-            $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'];
+            $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'] . ' ';
+
+            foreach($this->and_array as $and) {
+                if(!is_numeric($and['value'])) {
+                    $and['value'] = "\"{$and['value']}\"";
+                }
+                $query .= 'AND ' . $and['key'] . ' ' . $and['operand'] . ' ' . $and['value'] . ' ';
+            }
         }
 
         return trim($query) . ';';
