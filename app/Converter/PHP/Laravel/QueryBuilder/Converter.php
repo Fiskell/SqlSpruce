@@ -19,14 +19,11 @@ class Converter
 
         $query_parts = explode('->', $query);
         $query_parts = str_replace("\n", "", $query_parts);
-        print_r($query_parts);
 
         $query = new QueryBuilder();
         foreach ($query_parts as $query_part) {
             echo 'part' . "\n";
-            print_r($query_part);
             $call_parts = self::deconstructCall($query_part);
-            print_r($call_parts);
             switch($call_parts[0]) {
                 case 'table':
                     $query->setTable(self::unquote($call_parts[1]));
@@ -71,6 +68,7 @@ class Converter
      * @return array
      */
     public static function deconstructCall($call) {
+        $call = trim($call);
         $flux = Flux::getInstance()
                     ->startOfLine()
                     ->word()
@@ -82,7 +80,6 @@ class Converter
 
         $pattern = $flux->getPattern();
         preg_match($pattern, $call, $matches);
-        echo "\n" . $call . ' ' . json_encode($matches);
 
         return [array_get($matches, 1), array_get($matches, 3)];
     }
