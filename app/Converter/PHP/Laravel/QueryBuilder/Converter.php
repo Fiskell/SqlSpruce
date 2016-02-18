@@ -11,6 +11,7 @@ class Converter
      *
      * @param $builder
      * @return string
+     * @throws \Exception
      */
     public static function convert($builder) {
         $static_parts = explode('::', $builder);
@@ -22,7 +23,6 @@ class Converter
 
         $query = new QueryBuilder();
         foreach ($query_parts as $query_part) {
-            echo 'part' . "\n";
             $call_parts = self::deconstructCall($query_part);
             switch($call_parts[0]) {
                 case 'table':
