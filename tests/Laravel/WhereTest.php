@@ -59,4 +59,12 @@ class WhereTest extends TestCase
         $query = "SELECT * FROM `users` WHERE votes = 100 AND name = \"bernie\";";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_or() {
+        $builder = "DB::table('users')->where('votes', '>', 100)->orWhere('name', 'John')->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "SELECT * FROM `users` WHERE votes > 100 OR name = \"John\"";
+        $this->assertEquals($converted, $query);
+    }
 }
