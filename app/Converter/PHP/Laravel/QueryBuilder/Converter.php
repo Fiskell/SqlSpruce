@@ -51,6 +51,19 @@ class Converter
                     }
 
                     break;
+                case 'orWhere':
+                    $where_parts = explode(',', $call_parts[1]);
+                    $where_count = count($where_parts);
+
+                    if($where_count == 2) {
+                        $query->addOrCondition(self::unquote($where_parts[0]), self::unquote($where_parts[1]));
+                    } else if($where_count == 3) {
+                        $query->addOrCondition(self::unquote($where_parts[0]), self::unquote($where_parts[2]), self::unquote($where_parts[1]));
+                    } else {
+                        throw new \Exception('Invalid where clause');
+                    }
+
+                    break;
                 case 'get':
                     $query->setIsSelect(true);
             }
