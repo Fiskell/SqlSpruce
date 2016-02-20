@@ -10,7 +10,8 @@ class QueryBuilder
     private $select;
     private $distinct;
     private $table;
-    private $and_array;
+    private $and_array = [];
+    private $or_array = [];
     private $order_by;
     private $limit;
     private $offset;
@@ -44,6 +45,13 @@ class QueryBuilder
                     $and['value'] = "\"{$and['value']}\"";
                 }
                 $query .= 'AND ' . $and['key'] . ' ' . $and['operand'] . ' ' . $and['value'] . ' ';
+            }
+
+            foreach($this->or_array as $or) {
+                if(!is_numeric($or['value'])) {
+                    $or['value'] = "\"{$or['value']}\"";
+                }
+                $query .= 'OR ' . $or['key'] . ' ' . $or['operand'] . ' ' . $or['value'] . ' ';
             }
         }
 
@@ -148,6 +156,22 @@ class QueryBuilder
      */
     public function addAndCondition($key, $value, $operand="=") {
         $this->and_array[] = ['key' => $key, 'value' => $value, 'operand' => $operand];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrArray() {
+        return $this->or_array;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @param string $operand
+     */
+    public function addOrCondition($key, $value, $operand="=") {
+        $this->or_array[] = ['key' => $key, 'value' => $value, 'operand' => $operand];
     }
 
     /**
