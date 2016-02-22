@@ -11,7 +11,7 @@ class QueryBuilder
     private $distinct;
     private $table;
     private $and_array = [];
-    private $or_array = [];
+    private $or_array  = [];
     private $order_by;
     private $limit;
     private $offset;
@@ -19,11 +19,11 @@ class QueryBuilder
     public function getSelectQuery() {
         $query = "SELECT ";
 
-        if(is_null($this->select)) {
+        if (is_null($this->select)) {
             $this->select = ["*"];
         }
 
-        if(!is_null($this->distinct)) {
+        if (!is_null($this->distinct)) {
             $query .= "DISTINCT ";
         }
 
@@ -32,23 +32,23 @@ class QueryBuilder
         $query .= "FROM `{$this->table}` ";
 
 
-        if(count($this->and_array) > 0) {
+        if (count($this->and_array) > 0) {
             $where = array_shift($this->and_array);
 
-            if(!is_numeric($where['value'])) {
+            if (!is_numeric($where['value'])) {
                 $where['value'] = "\"{$where['value']}\"";
             }
             $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'] . ' ';
 
-            foreach($this->and_array as $and) {
-                if(!is_numeric($and['value'])) {
+            foreach ($this->and_array as $and) {
+                if (!is_numeric($and['value'])) {
                     $and['value'] = "\"{$and['value']}\"";
                 }
                 $query .= 'AND ' . $and['key'] . ' ' . $and['operand'] . ' ' . $and['value'] . ' ';
             }
 
-            foreach($this->or_array as $or) {
-                if(!is_numeric($or['value'])) {
+            foreach ($this->or_array as $or) {
+                if (!is_numeric($or['value'])) {
                     $or['value'] = "\"{$or['value']}\"";
                 }
                 $query .= 'OR ' . $or['key'] . ' ' . $or['operand'] . ' ' . $or['value'] . ' ';
@@ -125,7 +125,10 @@ class QueryBuilder
      * @param mixed $select
      */
     public function setSelect(array $select) {
-        $this->select = $select;
+        $this->select = [];
+        foreach($select as $select_item) {
+            $this->select[] = self::sanitizeParameter($select_item);
+        }
     }
 
     /**
@@ -139,7 +142,7 @@ class QueryBuilder
      * @param mixed $table
      */
     public function setTable($table) {
-        $this->table = $table;
+        $this->table = self::sanitizeParameter($table);
     }
 
     /**
@@ -154,8 +157,12 @@ class QueryBuilder
      * @param $value
      * @param string $operand
      */
-    public function addAndCondition($key, $value, $operand="=") {
-        $this->and_array[] = ['key' => $key, 'value' => $value, 'operand' => $operand];
+    public function addAndCondition($key, $value, $operand = "=") {
+        $this->and_array[] = [
+            'key'     => self::sanitizeParameter($key),
+            'value'   => self::sanitizeParameter($value),
+            'operand' => self::sanitizeParameter($operand)];
+
     }
 
     /**
@@ -170,8 +177,11 @@ class QueryBuilder
      * @param $value
      * @param string $operand
      */
-    public function addOrCondition($key, $value, $operand="=") {
-        $this->or_array[] = ['key' => $key, 'value' => $value, 'operand' => $operand];
+    public function addOrCondition($key, $value, $operand = "=") {
+        $this->or_array[] = [
+            'key'     => self::sanitizeParameter($key),
+            'value'   => self::sanitizeParameter($value),
+            'operand' => self::sanitizeParameter($operand)];
     }
 
     /**
@@ -228,5 +238,27 @@ class QueryBuilder
      */
     public function setDistinct($distinct) {
         $this->distinct = $distinct;
+    }
+
+
+    /**
+     * Remove starting and ending quotes (single and double)
+     *
+     * @param $string
+     * @return string
+     */
+    public static function unquote($string) {
+        $string = trim($string);
+        $string = trim($string, '\'');
+
+        return trim($string, '"');
+    }
+
+    /**
+     * @param $param
+     * @return string
+     */
+    public static function sanitizeParameter($param) {
+        return self::unquote($param);
     }
 }

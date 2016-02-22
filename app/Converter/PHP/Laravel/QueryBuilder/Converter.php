@@ -26,12 +26,12 @@ class Converter
             $call_parts = self::deconstructCall($query_part);
             switch($call_parts[0]) {
                 case 'table':
-                    $query->setTable(self::unquote($call_parts[1]));
+                    $query->setTable($call_parts[1]);
                     break;
                 case 'select':
                     $select_parts = [];
                     foreach(explode(',', $call_parts[1]) as $select_part){
-                        $select_parts[] = self::unquote($select_part);
+                        $select_parts[] = $select_part;
                     }
                     $query->setSelect($select_parts);
                     break;
@@ -43,9 +43,9 @@ class Converter
                     $where_count = count($where_parts);
 
                     if($where_count == 2) {
-                        $query->addAndCondition(self::unquote($where_parts[0]), self::unquote($where_parts[1]));
+                        $query->addAndCondition($where_parts[0], $where_parts[1]);
                     } else if($where_count == 3) {
-                        $query->addAndCondition(self::unquote($where_parts[0]), self::unquote($where_parts[2]), self::unquote($where_parts[1]));
+                        $query->addAndCondition($where_parts[0], $where_parts[2], $where_parts[1]);
                     } else {
                         throw new \Exception('Invalid where clause');
                     }
@@ -56,9 +56,9 @@ class Converter
                     $where_count = count($where_parts);
 
                     if($where_count == 2) {
-                        $query->addOrCondition(self::unquote($where_parts[0]), self::unquote($where_parts[1]));
+                        $query->addOrCondition($where_parts[0], $where_parts[1]);
                     } else if($where_count == 3) {
-                        $query->addOrCondition(self::unquote($where_parts[0]), self::unquote($where_parts[2]), self::unquote($where_parts[1]));
+                        $query->addOrCondition($where_parts[0], $where_parts[2], $where_parts[1]);
                     } else {
                         throw new \Exception('Invalid where clause');
                     }
@@ -73,18 +73,6 @@ class Converter
             return $query->getSelectQuery();
         }
         return "no query";
-    }
-
-    /**
-     * Remove starting and ending quotes (single and double)
-     *
-     * @param $string
-     * @return string
-     */
-    public static function unquote($string) {
-        $string = trim($string);
-        $string = trim($string, '\'');
-        return trim($string, '"');
     }
 
     /**
