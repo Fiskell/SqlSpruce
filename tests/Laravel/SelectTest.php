@@ -9,7 +9,7 @@ class SelectTest extends TestCase
         $builder = "DB::table('users')->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users`;";
+        $query = "select * from `users`;";
         $this->assertEquals($converted, $query);
     }
 
@@ -19,7 +19,7 @@ class SelectTest extends TestCase
             ->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT name FROM `users`;";
+        $query = "select name from `users`;";
         $this->assertEquals($converted, $query);
     }
 
@@ -27,7 +27,7 @@ class SelectTest extends TestCase
         $builder = "DB::table('users')->select('name', 'email as user_email')->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT name, email as user_email FROM `users`;";
+        $query = "select name, email as user_email from `users`;";
         $this->assertEquals($converted, $query);
     }
 
@@ -35,7 +35,7 @@ class SelectTest extends TestCase
         $builder = "DB::table('users')->distinct()->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT DISTINCT * FROM `users`;";
+        $query = "select distinct * from `users`;";
         $this->assertEquals($converted, $query);
     }
 }
