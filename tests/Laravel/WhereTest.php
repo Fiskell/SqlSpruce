@@ -9,7 +9,7 @@ class WhereTest extends TestCase
         $builder = "DB::table('users')->where('votes', '=', 100)->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes = 100;";
+        $query = "select * from `users` where `votes` = 100;";
         $this->assertEquals($converted, $query);
     }
 
@@ -17,7 +17,7 @@ class WhereTest extends TestCase
         $builder = "DB::table('users')->where('votes', 100)->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes = 100;";
+        $query = "select * from `users` where `votes` = 100;";
         $this->assertEquals($converted, $query);
     }
 
@@ -27,7 +27,7 @@ class WhereTest extends TestCase
                 ->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes >= 100;";
+        $query = "select * from `users` where `votes` >= 100;";
         $this->assertEquals($converted, $query);
     }
 
@@ -38,7 +38,7 @@ class WhereTest extends TestCase
                 ->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes <> 100;";
+        $query = "select * from `users` where `votes` <> 100;";
         $this->assertEquals($converted, $query);
     }
 
@@ -48,7 +48,7 @@ class WhereTest extends TestCase
                 ->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE name like \"T%\";";
+        $query = "select * from `users` where `name` like \"T%\";";
         $this->assertEquals($converted, $query);
     }
 
@@ -56,7 +56,7 @@ class WhereTest extends TestCase
         $builder = "DB::table('users')->where('votes', 100)->where('name', 'bernie')->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes = 100 AND name = \"bernie\";";
+        $query = "select * from `users` where `votes` = 100 and `name` = \"bernie\";";
         $this->assertEquals($converted, $query);
     }
 
@@ -64,7 +64,7 @@ class WhereTest extends TestCase
         $builder = "DB::table('users')->where('votes', '>', 100)->orWhere('name', 'John')->get();";
         $converted = Converter::convert($builder);
 
-        $query = "SELECT * FROM `users` WHERE votes > 100 OR name = \"John\";";
+        $query = "select * from `users` where `votes` > 100 or `name` = \"John\";";
         $this->assertEquals($converted, $query);
     }
 }
