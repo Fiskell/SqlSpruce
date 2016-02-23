@@ -27,6 +27,10 @@ class QueryBuilder
 
         $query_builder->select($this->select);
 
+        if (!is_null($this->distinct)) {
+            $query_builder->distinct();
+        }
+
         return $query_builder->toSql() . ';';
     }
 
