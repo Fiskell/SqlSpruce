@@ -1,6 +1,7 @@
 <?php namespace App\Converter;
 
 use DB;
+use Illuminate\Database\Query\Builder;
 
 class QueryBuilder
 {
@@ -18,6 +19,9 @@ class QueryBuilder
     private $limit;
     private $offset;
 
+    /**
+     * @return string
+     */
     public function getSelectQuery() {
         $query_builder = DB::table($this->table);
 
@@ -31,49 +35,32 @@ class QueryBuilder
             $query_builder->distinct();
         }
 
-        return $query_builder->toSql() . ';';
+        foreach($this->and_array as $and) {
+            if (!is_numeric($and['value'])) {
+                $and['value'] = "\"{$and['value']}\"";
+            }
+            $query_builder->where($and['key'], $and['operand'], $and['value']);
+        }
+
+        foreach($this->or_array as $or) {
+            if (!is_numeric($or['value'])) {
+                $or['value'] = "\"{$or['value']}\"";
+            }
+            $query_builder->orWhere($or['key'], $or['operand'], $or['value']);
+        }
+
+        return $this->getQuery($query_builder);
     }
 
-    public function agetSelectQuery() {
-        $query = "SELECT ";
-
-        if (is_null($this->select)) {
-            $this->select = ["*"];
-        }
-
-        if (!is_null($this->distinct)) {
-            $query .= "DISTINCT ";
-        }
-
-        $query .= implode(', ', $this->select) . " ";
-
-        $query .= "FROM `{$this->table}` ";
-
-
-        if (count($this->and_array) > 0) {
-            $where = array_shift($this->and_array);
-
-            if (!is_numeric($where['value'])) {
-                $where['value'] = "\"{$where['value']}\"";
-            }
-            $query .= 'WHERE ' . $where['key'] . ' ' . $where['operand'] . ' ' . $where['value'] . ' ';
-
-            foreach ($this->and_array as $and) {
-                if (!is_numeric($and['value'])) {
-                    $and['value'] = "\"{$and['value']}\"";
-                }
-                $query .= 'AND ' . $and['key'] . ' ' . $and['operand'] . ' ' . $and['value'] . ' ';
-            }
-
-            foreach ($this->or_array as $or) {
-                if (!is_numeric($or['value'])) {
-                    $or['value'] = "\"{$or['value']}\"";
-                }
-                $query .= 'OR ' . $or['key'] . ' ' . $or['operand'] . ' ' . $or['value'] . ' ';
-            }
-        }
-
-        return trim($query) . ';';
+    /**
+     * @param Builder $query_builder
+     * @return string
+     */
+    public function getQuery(Builder $query_builder) {
+        $query = $query_builder->toSql();
+        $bindings = $query_builder->getBindings();
+        $bound_query = vsprintf(str_replace("?", "%s", $query), $bindings);
+        return $bound_query . ";";
     }
 
     /**
