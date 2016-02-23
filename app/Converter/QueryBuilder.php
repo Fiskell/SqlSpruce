@@ -1,5 +1,7 @@
 <?php namespace App\Converter;
 
+use DB;
+
 class QueryBuilder
 {
     private $is_select;
@@ -17,6 +19,18 @@ class QueryBuilder
     private $offset;
 
     public function getSelectQuery() {
+        $query_builder = DB::table($this->table);
+
+        if (is_null($this->select)) {
+            $this->select = ["*"];
+        }
+
+        $query_builder->select($this->select);
+
+        return $query_builder->toSql() . ';';
+    }
+
+    public function agetSelectQuery() {
         $query = "SELECT ";
 
         if (is_null($this->select)) {
