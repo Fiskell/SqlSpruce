@@ -19,7 +19,7 @@ class SelectTest extends TestCase
             ->get();";
         $converted = Converter::convert($builder);
 
-        $query = "select name from `users`;";
+        $query = "select `name` from `users`;";
         $this->assertEquals($converted, $query);
     }
 
@@ -27,7 +27,7 @@ class SelectTest extends TestCase
         $builder = "DB::table('users')->select('name', 'email as user_email')->get();";
         $converted = Converter::convert($builder);
 
-        $query = "select name, email as user_email from `users`;";
+        $query = "select `name`, `email` as `user_email` from `users`;";
         $this->assertEquals($converted, $query);
     }
 
