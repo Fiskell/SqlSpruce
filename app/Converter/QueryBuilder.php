@@ -35,14 +35,14 @@ class QueryBuilder
             $query_builder->distinct();
         }
 
-        foreach($this->and_array as $and) {
+        foreach ($this->and_array as $and) {
             if (!is_numeric($and['value'])) {
                 $and['value'] = "\"{$and['value']}\"";
             }
             $query_builder->where($and['key'], $and['operand'], $and['value']);
         }
 
-        foreach($this->or_array as $or) {
+        foreach ($this->or_array as $or) {
             if (!is_numeric($or['value'])) {
                 $or['value'] = "\"{$or['value']}\"";
             }
@@ -57,9 +57,10 @@ class QueryBuilder
      * @return string
      */
     public function getQuery(Builder $query_builder) {
-        $query = $query_builder->toSql();
-        $bindings = $query_builder->getBindings();
+        $query       = $query_builder->toSql();
+        $bindings    = $query_builder->getBindings();
         $bound_query = vsprintf(str_replace("?", "%s", $query), $bindings);
+
         return $bound_query . ";";
     }
 
@@ -131,7 +132,7 @@ class QueryBuilder
      */
     public function setSelect(array $select) {
         $this->select = [];
-        foreach($select as $select_item) {
+        foreach ($select as $select_item) {
             $this->select[] = self::sanitizeParameter($select_item);
         }
     }
@@ -162,12 +163,11 @@ class QueryBuilder
      * @param $value
      * @param string $operand
      */
-    public function addAndCondition($key, $value, $operand = "=") {
+    public function addAndCondition($key, $operand, $value) {
         $this->and_array[] = [
             'key'     => self::sanitizeParameter($key),
-            'value'   => self::sanitizeParameter($value),
-            'operand' => self::sanitizeParameter($operand)];
-
+            'operand' => self::sanitizeParameter($operand),
+            'value'   => self::sanitizeParameter($value)];
     }
 
     /**
@@ -182,11 +182,11 @@ class QueryBuilder
      * @param $value
      * @param string $operand
      */
-    public function addOrCondition($key, $value, $operand = "=") {
+    public function addOrCondition($key, $operand, $value) {
         $this->or_array[] = [
             'key'     => self::sanitizeParameter($key),
-            'value'   => self::sanitizeParameter($value),
-            'operand' => self::sanitizeParameter($operand)];
+            'operand' => self::sanitizeParameter($operand),
+            'value'   => self::sanitizeParameter($value)];
     }
 
     /**

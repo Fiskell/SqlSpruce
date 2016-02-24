@@ -43,9 +43,9 @@ class Converter
                     $where_count = count($where_parts);
 
                     if($where_count == 2) {
-                        $query->addAndCondition($where_parts[0], $where_parts[1]);
+                        $query->addAndCondition($where_parts[0], '=', $where_parts[1]);
                     } else if($where_count == 3) {
-                        $query->addAndCondition($where_parts[0], $where_parts[2], $where_parts[1]);
+                        $query->addAndCondition($where_parts[0], $where_parts[1], $where_parts[2]);
                     } else {
                         throw new \Exception('Invalid where clause');
                     }
@@ -56,9 +56,9 @@ class Converter
                     $where_count = count($where_parts);
 
                     if($where_count == 2) {
-                        $query->addOrCondition($where_parts[0], $where_parts[1]);
+                        $query->addOrCondition($where_parts[0], '=', $where_parts[1]);
                     } else if($where_count == 3) {
-                        $query->addOrCondition($where_parts[0], $where_parts[2], $where_parts[1]);
+                        $query->addOrCondition($where_parts[0], $where_parts[1], $where_parts[2]);
                     } else {
                         throw new \Exception('Invalid where clause');
                     }
