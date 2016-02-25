@@ -64,6 +64,9 @@ class Converter
                     }
 
                     break;
+                case 'groupBy':
+                    $query->setGroupBy($call_parts[1]);
+                    break;
                 case 'get':
                     $query->setIsSelect(true);
             }

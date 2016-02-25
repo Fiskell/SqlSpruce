@@ -16,6 +16,7 @@ class QueryBuilder
     private $and_array = [];
     private $or_array  = [];
     private $order_by;
+    private $group_by;
     private $limit;
     private $offset;
 
@@ -47,6 +48,10 @@ class QueryBuilder
                 $or['value'] = "\"{$or['value']}\"";
             }
             $query_builder->orWhere($or['key'], $or['operand'], $or['value']);
+        }
+
+        if($this->group_by) {
+            $query_builder->groupBy($this->group_by);
         }
 
         return $this->getQuery($query_builder);
@@ -265,5 +270,19 @@ class QueryBuilder
      */
     public static function sanitizeParameter($param) {
         return self::unquote($param);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroupBy() {
+        return $this->group_by;
+    }
+
+    /**
+     * @param mixed $group_by
+     */
+    public function setGroupBy($group_by) {
+        $this->group_by = self::sanitizeParameter($group_by);
     }
 }
