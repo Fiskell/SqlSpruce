@@ -38,4 +38,15 @@ class SelectTest extends TestCase
         $query = "select distinct * from `users`;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_group_by() {
+        $builder = "DB::table('users')
+                     ->where('status', '<>', 1)
+                     ->groupBy('status')
+                     ->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` where `status` <> 1 group by `status`;";
+        $this->assertEquals($converted, $query);
+    }
 }
