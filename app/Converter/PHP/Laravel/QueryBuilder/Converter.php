@@ -29,11 +29,7 @@ class Converter
                     $query->setTable($call_parts[1]);
                     break;
                 case 'select':
-                    $select_parts = [];
-                    foreach(explode(',', $call_parts[1]) as $select_part){
-                        $select_parts[] = $select_part;
-                    }
-                    $query->setSelect($select_parts);
+                    $query->setSelect(explode(',', $call_parts[1]));
                     break;
                 case 'distinct':
                     $query->setDistinct(true);
@@ -63,6 +59,10 @@ class Converter
                         throw new \Exception('Invalid where clause');
                     }
 
+                    break;
+                case 'value':
+                    $query->setSelect([$call_parts[1]]);
+                    $query->setIsSelect(true);
                     break;
                 case 'groupBy':
                     $query->setGroupBy($call_parts[1]);
