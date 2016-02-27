@@ -49,4 +49,12 @@ class SelectTest extends TestCase
         $query = "select * from `users` where `status` <> 1 group by `status`;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_get_value() {
+        $builder = "DB::table('users')->where('name', 'John')->value('email');";
+        $converted = Converter::convert($builder);
+
+        $query = "select `email` from `users` where `name` = \"John\";";
+        $this->assertEquals($converted, $query);
+    }
 }
