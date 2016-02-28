@@ -15,7 +15,7 @@ class Converter
      */
     public static function convert($builder) {
         $static_parts = explode('::', $builder);
-//        $class        = $static_parts[0];
+        $class        = $static_parts[0];
         $query        = $static_parts[1];
 
         $query_parts = explode('->', $query);
@@ -57,6 +57,15 @@ class Converter
                         $query->addOrCondition($where_parts[0], $where_parts[1], $where_parts[2]);
                     } else {
                         throw new \Exception('Invalid where clause');
+                    }
+
+                    break;
+                case 'whereBetween':
+                    $where_parts = explode(',', $call_parts[1]);
+                    $where_count = count($where_parts);
+
+                    if($where_count == 2) {
+                        $query->addWhereBetweenCondition($where_parts[0], $where_parts[1]);
                     }
 
                     break;

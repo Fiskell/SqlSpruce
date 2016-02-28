@@ -54,6 +54,8 @@ class QueryBuilder
             $query_builder->groupBy($this->group_by);
         }
 
+        $query_builder->whereBetween();
+
         return $this->getQuery($query_builder);
     }
 
@@ -284,5 +286,9 @@ class QueryBuilder
      */
     public function setGroupBy($group_by) {
         $this->group_by = self::sanitizeParameter($group_by);
+    }
+
+    public function addWhereBetweenCondition($key, $values) {
+        // todo
     }
 }
