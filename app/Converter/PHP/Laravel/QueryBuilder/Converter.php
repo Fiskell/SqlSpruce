@@ -25,9 +25,9 @@ class Converter
         $query = null;
         foreach ($query_parts as $query_part) {
             $call_parts = self::deconstructCall($query_part);
-            $params_raw     = explode(',', array_get($call_parts, 1));
-            $params = [];
-            foreach($params_raw as $param) {
+            $params_raw = explode(',', array_get($call_parts, 1));
+            $params     = [];
+            foreach ($params_raw as $param) {
                 $params[] = self::sanitizeParameter($param);
             }
             switch ($call_parts[0]) {
@@ -41,43 +41,35 @@ class Converter
                     $query->distinct();
                     break;
                 case 'where':
-                    $where_parts = explode(',', $call_parts[1]);
-                    $where_count = count($where_parts);
-
-                    if ($where_count == 2) {
-                        $query->where($params[0], self::sanitizeValue($params[1]));
-                    } else if ($where_count == 3) {
-                        $query->where($params[0], $params[1], self::sanitizeValue($params[2]));
-                    } else {
-                        throw new \Exception('Invalid where clause');
-                    }
-
-                    break;
                 case 'orWhere':
-                    $where_parts = explode(',', $call_parts[1]);
-                    $where_count = count($where_parts);
-
-
-                    if ($where_count == 2) {
-                        $query->orWhere($params[0], self::sanitizeValue($params[1]));
-                    } else if ($where_count == 3) {
-                        $query->orWhere($params[0], $params[1], self::sanitizeValue($params[2]));
-                    } else {
-                        throw new \Exception('Invalid where clause');
-                    }
-
-                    break;
-                case 'value':
-                    $query->select($params[0]);
+                    $query = self::addWhere($query, $call_parts[0], $params);
                     break;
                 case 'groupBy':
                     $query->groupBy($params[0]);
                     break;
+                case 'value':
+                    $query->select($params[0]);
+                    break;
                 case 'get':
                     // DO NOTHING
+                    break;
             }
         }
+
         return self::getRawQuery($query);
+    }
+
+    public static function addWhere(Builder $query, $function, $params) {
+        $param_count = count($params);
+        if ($param_count == 2) {
+            $query->$function($params[0], self::sanitizeValue($params[1]));
+        } else if ($param_count == 3) {
+            $query->$function($params[0], $params[1], self::sanitizeValue($params[2]));
+        } else {
+            throw new \Exception('Invalid where clause');
+        }
+
+        return $query;
     }
 
     /**
@@ -143,6 +135,7 @@ class Converter
     public static function sanitizeValue($param) {
         $param = self::unquote($param);
         $param = is_numeric($param) ? $param : "\"$param\"";
+
         return $param;
     }
 }
