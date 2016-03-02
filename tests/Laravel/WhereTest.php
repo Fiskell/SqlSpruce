@@ -67,4 +67,13 @@ class WhereTest extends TestCase
         $query = "select * from `users` where `votes` > 100 or `name` = \"John\";";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_between() {
+        $builder = "DB::table('users')
+                    ->whereBetween('votes', [1, 100])->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` where `votes` between 1 and 100;";
+        $this->assertEquals($converted, $query);
+    }
 }

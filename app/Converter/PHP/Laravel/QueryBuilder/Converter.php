@@ -125,7 +125,9 @@ class Converter
      * @return string
      */
     public static function sanitizeParameter($param) {
-        return self::unquote($param);
+        $param = self::unquote($param);
+        $is_array = self::paramIsArray($param);
+        return $param;
     }
 
     /**
@@ -137,5 +139,20 @@ class Converter
         $param = is_numeric($param) ? $param : "\"$param\"";
 
         return $param;
+    }
+
+    public static function paramIsArray($param) {
+        $param = trim($param);
+        $flux = Flux::getInstance()
+            ->startOfLine()
+            ->find('[')
+            ->anything()
+            ->then(']')
+            ->endOfLine();
+
+        $pattern = $flux->getPattern();
+        preg_match($pattern, $param, $matches);
+        var_dump($matches);
+        return true;
     }
 }
