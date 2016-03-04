@@ -25,7 +25,7 @@ class Converter
         $query = null;
         foreach ($query_parts as $query_part) {
             $call_parts = self::deconstructCall($query_part);
-            $params_raw = explode(',', array_get($call_parts, 1));
+            $params_raw = self::deconstructParams($call_parts[1]);
             $params     = [];
             foreach ($params_raw as $param) {
                 $params[] = self::sanitizeParameter($param);
@@ -154,5 +154,28 @@ class Converter
         preg_match($pattern, $param, $matches);
         var_dump($matches);
         return true;
+    }
+
+    private static function deconstructParams($params) {
+        $params_raw = explode(',', $params);
+        $parsed_params = [];
+
+        foreach($params_raw as $param_raw) {
+            $params_raw = trim($param_raw);
+             $flux = Flux::getInstance()
+                ->startOfLine()
+                ->either("\[", "array\(")
+                ->anything()
+                ->endOfLine();
+            $pattern = $flux->getPattern();
+            preg_match($pattern, $param_raw, $matches);
+            if($matches > 0) {
+                var_dump($matches);
+            }
+
+            $parsed_params[] = $param_raw;
+        }
+
+        return $parsed_params;
     }
 }
