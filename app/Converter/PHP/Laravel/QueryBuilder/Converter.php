@@ -45,6 +45,7 @@ class Converter
                 case 'where':
                 case 'orWhere':
                 case 'whereNull':
+                case 'whereNotNull':
                     $query = self::addWhere($query, $call_parts[0], $params);
                     break;
                 case 'whereBetween':
