@@ -100,4 +100,12 @@ class WhereTest extends TestCase
         $query = "select * from `users` where `updated_at` is null;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_not_null() {
+        $builder = "DB::table('users')->whereNotNull('updated_at')->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` where `updated_at` is not null;";
+        $this->assertEquals($converted, $query);
+    }
 }
