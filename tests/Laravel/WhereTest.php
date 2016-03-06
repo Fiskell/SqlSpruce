@@ -76,4 +76,12 @@ class WhereTest extends TestCase
         $query = "select * from `users` where `votes` between 1 and 100;";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_in() {
+        $builder = "DB::table('users')->whereIn('id', [1, 2, 3])->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` where `id` in (1, 2, 3);";
+        $this->assertEquals($converted, $query);
+    }
 }
