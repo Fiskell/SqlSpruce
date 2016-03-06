@@ -84,4 +84,12 @@ class WhereTest extends TestCase
         $query = "select * from `users` where `id` in (1, 2, 3);";
         $this->assertEquals($converted, $query);
     }
+
+    public function test_where_not_in() {
+        $builder = "DB::table('users')->whereNotIn('id', [1, 2, 3])->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` where `id` not in (1, 2, 3);";
+        $this->assertEquals($converted, $query);
+    }
 }
