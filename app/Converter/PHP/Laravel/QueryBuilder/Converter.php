@@ -44,6 +44,7 @@ class Converter
                     break;
                 case 'where':
                 case 'orWhere':
+                case 'whereNull':
                     $query = self::addWhere($query, $call_parts[0], $params);
                     break;
                 case 'whereBetween':
@@ -191,17 +192,21 @@ class Converter
     public static function addWhere(Builder $query, $function, $params)
     {
         $param_count = count($params);
-        if ($param_count == 2) {
-            if(!is_array($params[1])) {
-                $params[1] = self::sanitizeValue($params[1]);
-            }
-            $query->$function($params[0], $params[1]);
-        } else {
-            if ($param_count == 3) {
+        switch($param_count) {
+            case 1:
+                $query->$function($params[0]);
+                break;
+            case 2:
+                if(!is_array($params[1])) {
+                    $params[1] = self::sanitizeValue($params[1]);
+                }
+                $query->$function($params[0], $params[1]);
+                break;
+            case 3:
                 $query->$function($params[0], $params[1], self::sanitizeValue($params[2]));
-            } else {
+                break;
+            default:
                 throw new \Exception('Invalid where clause');
-            }
         }
 
         return $query;
