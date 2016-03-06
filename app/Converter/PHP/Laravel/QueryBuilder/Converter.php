@@ -69,8 +69,10 @@ class Converter
                     }
 
                     $column = current(array_keys($decode));
+
                     $values = $decode[$column];
 
+                    // Currently only supports 2/4 params
                     $query->whereBetween($column, $values);
 
                     break;
