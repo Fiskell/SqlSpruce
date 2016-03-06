@@ -48,6 +48,7 @@ class Converter
                     break;
                 case 'whereBetween':
                 case 'whereIn':
+                case 'whereNotIn':
                     $pos = strpos($call_parts[1], ',');
                     if (!$pos) {
                         // TODO fail hard
