@@ -47,6 +47,7 @@ class Converter
                     $query = self::addWhere($query, $call_parts[0], $params);
                     break;
                 case 'whereBetween':
+                case 'whereIn':
                     $pos = strpos($call_parts[1], ',');
                     if (!$pos) {
                         // TODO fail hard
@@ -72,8 +73,12 @@ class Converter
 
                     $values = $decode[$column];
 
+                    $params = [];
+                    $params[] = $column;
+                    $params[] = $values;
+
                     // Currently only supports 2/4 params
-                    $query->whereBetween($column, $values);
+                    $query = self::addWhere($query, $call_parts[0], $params);
 
                     break;
                 case 'groupBy':
@@ -186,7 +191,10 @@ class Converter
     {
         $param_count = count($params);
         if ($param_count == 2) {
-            $query->$function($params[0], self::sanitizeValue($params[1]));
+            if(!is_array($params[1])) {
+                $params[1] = self::sanitizeValue($params[1]);
+            }
+            $query->$function($params[0], $params[1]);
         } else {
             if ($param_count == 3) {
                 $query->$function($params[0], $params[1], self::sanitizeValue($params[2]));
