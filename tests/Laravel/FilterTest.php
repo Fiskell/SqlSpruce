@@ -23,4 +23,12 @@ class FilterTest extends TestCase
         $this->assertEquals($converted, $query);
     }
 
+    public function test_group_by_having() {
+        $builder   = "DB::table('users')->groupBy('account_id')->having('account_id', '>', 100)->get();";
+        $converted = Converter::convert($builder);
+
+        $query = "select * from `users` group by `account_id` having `account_id` > 100;";
+        $this->assertEquals($converted, $query);
+    }
+
 }
