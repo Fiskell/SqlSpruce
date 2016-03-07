@@ -46,7 +46,7 @@ class Converter
                 case 'orWhere':
                 case 'whereNull':
                 case 'whereNotNull':
-                    $query = self::addWhere($query, $call_parts[0], $params);
+                    $query = self::relayFunction($query, $call_parts[0], $params);
                     break;
                 case 'whereBetween':
                 case 'whereIn':
@@ -81,7 +81,7 @@ class Converter
                     $params[] = $values;
 
                     // Currently only supports 2/4 params
-                    $query = self::addWhere($query, $call_parts[0], $params);
+                    $query = self::relayFunction($query, $call_parts[0], $params);
 
                     break;
                 case 'groupBy':
@@ -190,7 +190,7 @@ class Converter
         return true;
     }
 
-    public static function addWhere(Builder $query, $function, $params)
+    public static function relayFunction(Builder $query, $function, $params)
     {
         $param_count = count($params);
         switch($param_count) {
