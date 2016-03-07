@@ -87,11 +87,11 @@ class Converter
                     $query = self::relayFunction($query, $call_parts[0], $params);
 
                     break;
-                case 'groupBy':
-                    $query->groupBy($params[0]);
-                    break;
                 case 'value':
                     $query->select($params[0]);
+                    break;
+                case 'delete':
+                    $query = $query->getGrammar()->compileDelete($query) . ';';
                     break;
                 case 'get':
                     // DO NOTHING
@@ -99,7 +99,7 @@ class Converter
             }
         }
 
-        return self::getRawQuery($query);
+        return ($query instanceof Builder) ? self::getRawQuery($query) : $query;
     }
 
     /**
