@@ -47,6 +47,7 @@ class Converter
                 case 'whereNull':
                 case 'whereNotNull':
                 case 'orderBy':
+                case 'groupBy':
                     $query = self::relayFunction($query, $call_parts[0], $params);
                     break;
                 case 'whereBetween':
