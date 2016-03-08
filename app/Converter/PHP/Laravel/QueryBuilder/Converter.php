@@ -91,7 +91,8 @@ class Converter
                     $query->select($params[0]);
                     break;
                 case 'delete':
-                    $query = $query->getGrammar()->compileDelete($query) . ';';
+                    $unbound_query = $query->getGrammar()->compileDelete($query);
+                    $query = self::addBindingsToQuery($query, $unbound_query);
                     break;
                 case 'get':
                     // DO NOTHING
@@ -230,15 +231,25 @@ class Converter
     }
 
     /**
-     * @param Builder $query
+     * @param Builder $builder
      *
      * @return string
      */
-    public static function getRawQuery(Builder $query)
+    public static function getRawQuery(Builder $builder)
     {
-        $raw_query   = $query->toSql();
-        $bindings    = $query->getBindings();
-        $bound_query = vsprintf(str_replace("?", "%s", $raw_query), $bindings);
+        $query   = $builder->toSql();
+        return self::addBindingsToQuery($builder, $query);
+    }
+
+    /**
+     * @param Builder $builder
+     * @param         $query
+     *
+     * @return string
+     */
+    public static function addBindingsToQuery(Builder $builder, $query) {
+        $bindings    = $builder->getBindings();
+        $bound_query = vsprintf(str_replace("?", "%s", $query), $bindings);
 
         return $bound_query . ";";
     }
