@@ -110,7 +110,7 @@ class WhereTest extends TestCase
     }
 
     public function test_multi_statement_where() {
-        $builder = "DB::table('users')->where([['status','1'],['subscribed','<>','1'],])->get();";
+        $builder = "DB::table('users')->where([['status','1'],['subscribed','<>','1']])->get();";
         $converted = Converter::convert($builder);
 
         $query = "select * from `users` where `status` = 1 and subscribed <> 1;";
