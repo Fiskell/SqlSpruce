@@ -43,6 +43,15 @@ class Converter
                     $query->distinct();
                     break;
                 case 'where':
+                    $json_string = '{"tmp":' . $call_parts[1] . '}';
+                    $json_string = str_replace("'", "\"", $json_string);
+                    $json = json_decode($json_string, true);
+                    if(is_array($json)) {
+                        $query = self::relayFunction($query, $json['tmp'], $params);
+                    } else {
+                        $query = self::relayFunction($query, $call_parts[0], $params);
+                    }
+                    break;
                 case 'orWhere':
                 case 'whereNull':
                 case 'whereNotNull':
