@@ -203,6 +203,10 @@ class Converter
         return true;
     }
 
+    public static function getNestedArrayAsObject($param) {
+        // TODO
+    }
+
     public static function relayFunction(Builder $query, $function, $params)
     {
         $param_count = count($params);
