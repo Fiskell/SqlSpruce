@@ -23,4 +23,12 @@ class WriteTest extends TestCase
         $this->assertEquals($converted, $query);
     }
 
+    public function test_update() {
+        $builder   = "DB::table('users')->where('id', 1)->update(['votes' => 1]);";
+        $converted = Converter::convert($builder);
+
+        $query = "delete from `users` where `votes` < 100;";
+        $this->assertEquals($converted, $query);
+    }
+
 }
